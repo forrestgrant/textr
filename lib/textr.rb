@@ -11,7 +11,7 @@ module Textr
     :sprint => 'messaging.sprintpcs.com',
     :verizon => 'vtext.com',
     :virgin => 'vmobl.com'
-  }    	
+  }
 	
   def self.extended(base)
     # Added device_token attribute if not included by acts_as_pushable
@@ -26,7 +26,7 @@ module Textr
     "#{options[:number].gsub(/\D/, "")[-10..-1]}@#{@@carriers[options[:carrier].to_sym]}"
   end
   
-  def send( options={} )
+  def send_sms( options={} )
     number = options[:number] || phone
     puts "here"
     raise "#{self.class.to_s}" if number.blank?
@@ -37,7 +37,9 @@ module Textr
       :to => txtable_address({:carrier => options[:carrier], :number => number}),
       :subject => options[:subject],
       :body => options[:body]
-    }.merge(get_options))
+    })
   end
 	
 end
+
+require File.dirname(__FILE__) + "/textr/extends_textr"
