@@ -1,8 +1,9 @@
 require "textr/version"
+require "textr/rake/tasks"
 require 'pony'
 
 module Textr
-  		
+    		
 	# List of main US carriers
 	@@carriers = {
     :att => 'txt.att.net',
