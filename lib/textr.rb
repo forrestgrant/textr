@@ -4,6 +4,22 @@ require "textr/rake/tasks"
 require 'pony'
 
 module Textr
+   
+  @@config = File.exists?(Rails.root.to_s + '/config/textr_smtp.yml') ? YAML.load(ERB.new(File.read((Rails.root.to_s + '/config/textr_smtp.yml'))).result)[Rails.env].symbolize_keys : false
+  def smtp_options
+    @@config ? { :from => @@config[:from],
+                 :via => @@config[:protocol].to_sym,
+                 :via_options => {
+                   :address              => @@config[:address],
+                   :port                 => @@config[:port],
+                   :enable_starttls_auto => @@config[:ssl],
+                   :user_name            => @@config[:username],
+                   :password             => @@config[:password],
+                   :authentication       => @@config[:authentication],
+                   :domain               => @@config[:domain]
+                 }
+                } : { }
+  end
     		
 	# List of main US carriers
 	@@carriers = {
@@ -16,7 +32,7 @@ module Textr
   }
 	
   def self.extended(base)
-    # Added device_token attribute if not included by acts_as_pushable
+    # Added phone attribute if not included by extends_textr
     unless base.respond_to?(:textr_options)
       base.class_eval do
         attr_accessor :phone
@@ -39,7 +55,7 @@ module Textr
       :to => txtable_address({:carrier => options[:carrier], :number => number}),
       :subject => options[:subject],
       :body => options[:body]
-    }.merge(smtp))
+    }.merge(smtp_options))
   end
 	
 end
