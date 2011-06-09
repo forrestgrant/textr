@@ -1,6 +1,7 @@
-namespace :textr do
-  desc "Find the slowest unit tests"
-  task :smtp do
-    10.times { puts "Hello world" }
-  end
+require 'rake'
+require 'textr/task'
+
+desc "Run all examples"
+Textr::Rake::TextrTask.new('examples') do |t|
+  10.times { puts "hello world" }
 end
