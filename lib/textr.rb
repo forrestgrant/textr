@@ -1,4 +1,5 @@
 require "textr/version"
+require "textr/smtp"
 require "textr/rake/tasks"
 require 'pony'
 
@@ -38,7 +39,7 @@ module Textr
       :to => txtable_address({:carrier => options[:carrier], :number => number}),
       :subject => options[:subject],
       :body => options[:body]
-    })
+    }.merge(smtp))
   end
 	
 end
