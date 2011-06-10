@@ -25,15 +25,20 @@ You can then send an SMS like this
 
     User.first.send_notification :carrier => 'att', :body => 'Hello World!'
 
-Your model must have a `device_token` attribute. If you wish to change this to something else (like `device` for example), simply pass it like this `acts_as_pushable :device`.
+Your model must have a `phone` attribute. If you wish to change this to something else (like `number` for example), simply pass it like this `extends_textr :number`
+    
+		class User < ActiveRecord::Base
+			extends_textr :number
+		end
+
+Or you can override the `phone` attribute
+
+		User.first.send_notification :number => '098-765-4321', :carrier => 'att', :body => 'Hello World!'
 
 ### Standalone
 
-Simply call `ApplePushNotification.send_notification` and pass the device token as the first parameter and the hash of notification options as the second (see the Parameters section for more information).
+Simply call `Textr.send_sms` and pass the number with the hash.
 
-    $ script/console
-    >> token = "XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX"
-    >> ApplePushNotification.send_notification token, :alert => "Hello World!", :badge => 5, :sound => true
-    => nil
-
-### Any Object
+    $ rails c
+    >> Textr.send_sms :number => '123-456-7890', :body => 'Hello World!', :carrier => 'att'
+    => #<Mail::Message:12345>

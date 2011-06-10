@@ -7,7 +7,7 @@ module Textr
    
   @@config = File.exists?('config/textr_smtp.yml') ? YAML.load(ERB.new(File.read(('config/textr_smtp.yml'))).result)[Rails.env].symbolize_keys : false
   
-  def smtp_options
+  def self.smtp_options
     @@config ? { :from => @@config[:from],
                  :via => @@config[:protocol].to_sym,
                  :via_options => {
@@ -41,11 +41,11 @@ module Textr
     end
   end
     
-  def txtable_address( options={} )
+  def self.txtable_address( options={} )
     "#{options[:number].gsub(/\D/, "")[-10..-1]}@#{@@carriers[options[:carrier].to_sym]}"
   end
   
-  def send_sms( options={} )
+  def self.send_sms( options={} )
     number = options[:number] || self.number_from_options
     raise "#{self.class.to_s}" if number.blank?
     raise ':carrier required' if options[:carrier].nil?
