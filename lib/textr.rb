@@ -4,10 +4,10 @@ require 'pony'
 require 'rails'
 
 module Textr
-   
+  
   @@config = File.exists?('config/textr_smtp.yml') ? YAML.load(ERB.new(File.read(('config/textr_smtp.yml'))).result)[Rails.env].symbolize_keys : false
   
-  def self.smtp_options
+  def smtp_options
     @@config ? { :from => @@config[:from],
                  :via => @@config[:protocol].to_sym,
                  :via_options => {
@@ -22,7 +22,6 @@ module Textr
                 } : { }
   end
     		
-	# List of main US carriers
 	@@carriers = {
     :att => 'txt.att.net',
     :boost => 'myboostmobile.com',
@@ -33,7 +32,6 @@ module Textr
   }
 	
   def self.extended(base)
-    # Added phone attribute if not included by extends_textr
     unless base.respond_to?(:textr_options)
       base.class_eval do
         attr_accessor :phone
@@ -41,11 +39,15 @@ module Textr
     end
   end
     
-  def self.txtable_address( options={} )
+  def txtable_address( options={} )
     "#{options[:number].gsub(/\D/, "")[-10..-1]}@#{@@carriers[options[:carrier].to_sym]}"
   end
   
-  def self.send_sms( options={} )
+  def txtable_address( options={} )
+    "#{options[:number].gsub(/\D/, "")[-10..-1]}@#{@@carriers[options[:carrier].to_sym]}"
+  end
+  
+  def send_sms( options={} )
     number = options[:number] || self.number_from_options
     raise "#{self.class.to_s}" if number.blank?
     raise ':carrier required' if options[:carrier].nil?
@@ -58,9 +60,13 @@ module Textr
     }.merge(smtp_options))
   end
   
+  def self.send_sms( options={} )
+    sms = Object.new
+    sms.extend Textr
+    sms.send_sms(options)
+  end
+  
   def number_from_options
-    # Use `phone` as the method to get the token from
-    # unless it is overridde from extends_textr
     if respond_to?(:textr_options)
       phone = textr_options[:phone_field]
     end
