@@ -1,11 +1,12 @@
 require "textr/version"
-require "textr/smtp"
 require "textr/rake/tasks"
 require 'pony'
+require 'rails'
 
 module Textr
    
-  @@config = File.exists?(Rails.root.to_s + '/config/textr_smtp.yml') ? YAML.load(ERB.new(File.read((Rails.root.to_s + '/config/textr_smtp.yml'))).result)[Rails.env].symbolize_keys : false
+  @@config = File.exists?('config/textr_smtp.yml') ? YAML.load(ERB.new(File.read(('config/textr_smtp.yml'))).result)[Rails.env].symbolize_keys : false
+  
   def smtp_options
     @@config ? { :from => @@config[:from],
                  :via => @@config[:protocol].to_sym,
@@ -45,8 +46,7 @@ module Textr
   end
   
   def send_sms( options={} )
-    number = options[:number] || phone
-    puts "here"
+    number = options[:number] || self.number_from_options
     raise "#{self.class.to_s}" if number.blank?
     raise ':carrier required' if options[:carrier].nil?
     raise ':body required' if options[:body].nil?
@@ -56,6 +56,15 @@ module Textr
       :subject => options[:subject],
       :body => options[:body]
     }.merge(smtp_options))
+  end
+  
+  def number_from_options
+    # Use `phone` as the method to get the token from
+    # unless it is overridde from extends_textr
+    if respond_to?(:textr_options)
+      phone = textr_options[:phone_field]
+    end
+    send(phone)
   end
 	
 end
