@@ -1,4 +1,7 @@
 # textr
+
+Simple gem for sending SMS
+
 ## Install
 ### RubyGems.org
 	coming soon
