@@ -4,7 +4,7 @@ Simple gem for sending SMS
 
 ## Install
 ### RubyGems.org
-	coming soon
+	$ gem install textr
 
 ### from source
 	$ git clone http://github.com/forrestgrant/textr
