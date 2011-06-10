@@ -42,3 +42,44 @@ Simply call `Textr.send_sms` and pass the number with the hash.
     $ rails c
     >> Textr.send_sms :number => '123-456-7890', :body => 'Hello World!', :carrier => 'att'
     => #<Mail::Message:12345>
+
+### Transport
+
+textr relies on Pony (https://github.com/benprew/pony) for mail transport which uses /usr/sbin/sendmail to send mail if it is available, otherwise it uses SMTP to localhost.  To add custom SMTP config
+
+		rake textr:config:smtp
+
+This will generate `config/textr_smtp.yml`, add your custom SMTP settings
+
+		development:
+		  protocol: smtp
+		  from: email@example.com
+		  address: smtp.yourserver.com
+		  port: 25
+		  ssl: true
+		  username: user
+		  password: password
+		  authentication: plain
+		  domain: localhost.localdomain
+
+		test:
+		  protocol: smtp
+		  from: email@example.com
+		  address: smtp.yourserver.com
+		  port: 25
+		  ssl: true
+		  username: user
+		  password: password
+		  authentication: plain
+		  domain: localhost.localdomain
+
+		production:
+		  protocol: smtp
+		  from: email@example.com
+		  address: smtp.yourserver.com
+		  port: 25
+		  ssl: true
+		  username: user
+		  password: password
+		  authentication: plain
+		  domain: localhost.localdomain
