@@ -24,9 +24,15 @@ module Textr
     		
 	@@carriers = {
     :att => 'txt.att.net',
+    :alltel => 'message.alltel.com',
     :boost => 'myboostmobile.com',
-    :tmobile => 'tmomail.net',
+    :cellone => 'mobile.celloneusa.com',
+    :metropcs => 'mymetropcs.com',
+    :nextel => 'messaging.nextel.com',
+    :rogers => 'pcs.rogers.com',
     :sprint => 'messaging.sprintpcs.com',
+    :tmobile => 'tmomail.net',
+    :uscellular => 'email.uscc.net',
     :verizon => 'vtext.com',
     :virgin => 'vmobl.com'
   }
