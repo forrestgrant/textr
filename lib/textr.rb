@@ -21,8 +21,8 @@ module Textr
                  }
                 } : { }
   end
-    		
-	@@carriers = {
+  
+  @@carriers = {
     :att => 'txt.att.net',
     :alltel => 'message.alltel.com',
     :boost => 'myboostmobile.com',
